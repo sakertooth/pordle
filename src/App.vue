@@ -3,7 +3,7 @@
 
     let currentRow = 0;
     let currentTile = -1;
-    let currentWord = 'prom';
+    let correctWord = 'prom';
 
     function getRow(row: number) {
         return document.getElementById('board')?.children[row];
@@ -13,19 +13,46 @@
         return getRow(row)?.children[tile];
     }
 
-    function getEvaluation(guess: string, word: string) {
-        if (guess.length != word.length) {
-            console.log('[ERROR] Mismatching lengths.');
+    function charCount(str: string, target: string) {
+        if (target.length != 1) {
             return;
         }
 
-        
+        let count = 0;
+        for (let i = 0; i < str.length; ++i) {
+            if (str.charAt(i) == target) {
+                ++count;
+            }
+        }
+
+        return count;
+    }
+
+    function getEvaluation(guess: string, word: string) {
+        let evaluation = Array(4).fill('⬜');
+        let wordLetterPool = [...word];
+
+        for (let letterIndex = 0; letterIndex < 4; letterIndex++) {
+            if (guess[letterIndex] == wordLetterPool[letterIndex]) {
+                evaluation[letterIndex] = '🟩';
+                wordLetterPool[letterIndex] = '';
+            }
+            else if (wordLetterPool.includes(guess[letterIndex])) {
+                evaluation[letterIndex] = '🟨';
+                wordLetterPool[wordLetterPool.indexOf(guess[letterIndex])] = '';
+            }
+            else {
+                evaluation[letterIndex] = '⬜';
+                wordLetterPool[letterIndex] = '';
+            }
+        }
+
+        return evaluation;
     }
 
     function isLetter(str: string) {
         return str.length === 1 && str.match(/[a-z]/i);
     }
-
 
     function onKeyPressed(event: KeyboardEvent): void {
         if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) {
@@ -72,10 +99,21 @@
         }
         
         if (event.key == 'Enter' && currentTile == 3 && currentRow < 6) {
+
+            let currentRowWord = getRow(currentRow)?.getAttribute('word');
+            if (currentRowWord == null) {
+                return;
+            }
+
+            let evaluation = getEvaluation(currentRowWord, correctWord);
+            console.log(evaluation);
+
             for (let tile = 0; tile < 4; tile++) {
                 let currentTileHtml = getTile(currentRow, tile);
                 setTimeout(() => currentTileHtml?.setAttribute('animation-state', 'flip-in'), 250 * tile);
-                setTimeout(() => currentTileHtml?.setAttribute('animation-state', 'flip-out'), 250 * tile + 250);
+                setTimeout(() => {
+                    currentTileHtml?.setAttribute('animation-state', 'flip-out');
+                }, 250 * tile + 250);
             }
 
             currentRow++;
