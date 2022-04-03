@@ -42,10 +42,6 @@
                 evaluation[letterIndex] = '🟨';
                 wordLetterPool[wordLetterPool.indexOf(guess[letterIndex])] = '';
             }
-            else {
-                evaluation[letterIndex] = '⬜';
-                wordLetterPool[letterIndex] = '';
-            }
         }
 
         return evaluation;
