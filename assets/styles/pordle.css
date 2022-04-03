@@ -1,0 +1,11 @@
+:root {
+    --color-tone-1: #000000;
+    --color-tone-2: #787c7e;
+    --color-tone-3: #878a8c;
+    --color-tone-4: #d3d6da;
+    --color-tone-5: #edeff1;
+    --color-tone-6: #f6f7f8;
+    --color-tone-7: #ffffff;
+    --color-nav-hover: #f4f4f4;
+    --opacity-50: rgba(255, 255, 255, 0.5);
+}
