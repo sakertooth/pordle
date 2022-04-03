@@ -14,21 +14,6 @@
         return getRow(row)?.children[tile];
     }
 
-    function charCount(str: string, target: string) {
-        if (target.length != 1) {
-            return;
-        }
-
-        let count = 0;
-        for (let i = 0; i < str.length; ++i) {
-            if (str.charAt(i) == target) {
-                ++count;
-            }
-        }
-
-        return count;
-    }
-
     function getEvaluation(guess: string, word: string) {
         let evaluation = Array(4).fill('⬜');
         let wordLetterPool = [...word];
