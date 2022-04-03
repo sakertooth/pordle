@@ -4,6 +4,7 @@
     let currentRow = 0;
     let currentTile = -1;
     let correctWord = 'prom';
+    let gameOver = false;
 
     function getRow(row: number) {
         return document.getElementById('board')?.children[row];
@@ -55,7 +56,7 @@
     }
 
     function onKeyPressed(event: KeyboardEvent): void {
-        if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) {
+        if (gameOver || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) {
             return;
         }
 
@@ -106,13 +107,27 @@
             }
 
             let evaluation = getEvaluation(currentRowWord, correctWord);
-            console.log(evaluation);
+            if (evaluation.every(x => x == '🟩')) {
+                gameOver = true;
+            }
 
             for (let tile = 0; tile < 4; tile++) {
                 let currentTileHtml = getTile(currentRow, tile);
                 setTimeout(() => currentTileHtml?.setAttribute('animation-state', 'flip-in'), 250 * tile);
                 setTimeout(() => {
                     currentTileHtml?.setAttribute('animation-state', 'flip-out');
+
+                    switch (evaluation[tile]) {
+                        case '🟩':
+                            currentTileHtml?.setAttribute('tile-state', 'correct');
+                            break;
+                        case '🟨':
+                            currentTileHtml?.setAttribute('tile-state', 'present');
+                            break;
+                        case '⬜':
+                            currentTileHtml?.setAttribute('tile-state', 'absent');
+                            break;
+                    }
                 }, 250 * tile + 250);
             }
 
@@ -131,7 +146,7 @@
 <style>
     body 
     {
-        background-color: rgb(109, 119, 201);
+        background-color: rgb(56, 61, 105);
         font-family: Arial, Helvetica, sans-serif;
     }
 

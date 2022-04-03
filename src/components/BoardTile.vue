@@ -26,9 +26,24 @@
 
     .board-tile[tile-state='filled'] {
         border: 2px solid var(--color-tone-3);
-        color: var(--color-tone-1);
         color: white;
     }
+
+    .board-tile[tile-state='correct'] {
+        background-color: var(--color-correct);
+        color: white;
+    }
+
+    .board-tile[tile-state='present'] {
+        background-color: var(--color-present);
+        color: white;
+    }
+
+    .board-tile[tile-state='absent'] {
+        background-color: var(--color-absent);
+        color: white;
+    }
+
 
     .board-tile[animation-state='pop'] {
         animation-name: Pop;
