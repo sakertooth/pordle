@@ -1,17 +1,19 @@
 <script setup lang="ts">
-    import Board from './Board.vue'
+    import Toast from './Toast.vue'
 </script>
 
 <template>
-    <div id="board-container">
-        <Board />
+    <div id='toast-container'>
+        <Toast />
     </div>
 </template>
 
 <style>
-    #board-container {
+    #toast-container {
         display: flex;
         align-items: center;
         justify-content: center;
+        position: relative;
+        padding-bottom: 25px;
     }
 </style>

@@ -1,10 +1,14 @@
 <script setup lang="ts">
-    import BoardContainer from './components/BoardContainer.vue'
+    import GameContainer from './components/GameContainer.vue'
+    import wordListRaw from '../assets/validWords.txt?raw'
+    import { onMounted } from 'vue';
+    import { refreshToast } from './refreshtoast'
 
     let currentRow = 0;
     let currentTile = -1;
     let correctWord = 'prom';
-    let gameOver = false;
+    let gameWon = false;
+    let wordList = wordListRaw.split('\n');
 
     function getRow(row: number) {
         return document.getElementById('board')?.children[row];
@@ -36,80 +40,61 @@
         return str.length === 1 && str.match(/[a-z]/i);
     }
 
-    function onKeyPressed(event: KeyboardEvent): void {
-        if (gameOver || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) {
+    function handleLetterPress(letter: string) {
+        let currentTileHtml = getTile(currentRow, ++currentTile);
+        if (currentTileHtml == undefined) {
+            console.log(`[ERROR] tile (${currentRow}, ${currentTile}) is undefined`);
             return;
         }
 
-        if (isLetter(event.key) && currentTile < 3) {
-            let currentTileHtml = getTile(currentRow, ++currentTile);
-            if (currentTileHtml == undefined) {
-                console.log(`[ERROR] tile (${currentRow}, ${currentTile}) is undefined`);
-                return;
-            }
-    
-            currentTileHtml.textContent = event.key.toUpperCase();
-            currentTileHtml.setAttribute('animation-state', 'pop');
-            currentTileHtml.setAttribute('tile-state', 'filled');
+        currentTileHtml.textContent = letter.toUpperCase();
+        currentTileHtml.setAttribute('animation-state', 'pop');
+        currentTileHtml.setAttribute('tile-state', 'filled');
 
-            let currentRowHtml = getRow(currentRow);
-            if (currentRowHtml == undefined) {
-                return;
-            }
-
-            currentRowHtml.setAttribute('word', `${currentRowHtml.getAttribute('word')}${event.key}`);
+        let currentRowHtml = getRow(currentRow);
+        if (currentRowHtml == undefined) {
+            return;
         }
 
-        if (event.key == 'Backspace' && currentTile >= 0 && currentRow < 6) {
-            let currentTileHtml = getTile(currentRow, currentTile--);
-            if (currentTileHtml == undefined) {
-                console.log(`[ERROR] tile (${currentRow}, ${currentTile}) is undefined`);
-                return;
-            }
+        currentRowHtml.setAttribute('word', `${currentRowHtml.getAttribute('word')}${letter}`);
+    }
 
-            currentTileHtml.textContent = '';
-            currentTileHtml.setAttribute('animation-state', 'pop-out');
-            currentTileHtml.setAttribute('tile-state', 'empty');
-
-            let currentRowHtml = getRow(currentRow);
-            if (currentRowHtml == undefined) {
-                return;
-            }
-
-            let currentRowWord = currentRowHtml.getAttribute('word');
-            currentRowHtml.setAttribute('word', `${currentRowWord?.slice(0, currentRowWord.length - 1)}`);            
+    function handleBackspace() {
+        let currentTileHtml = getTile(currentRow, currentTile--);
+        if (currentTileHtml == undefined) {
+            console.log(`[ERROR] tile (${currentRow}, ${currentTile}) is undefined`);
+            return;
         }
-        
-        if (event.key == 'Enter' && currentTile == 3 && currentRow < 6) {
 
-            let currentRowWord = getRow(currentRow)?.getAttribute('word');
-            if (currentRowWord == null) {
-                return;
-            }
+        currentTileHtml.textContent = '';
+        currentTileHtml.setAttribute('animation-state', 'pop-out');
+        currentTileHtml.setAttribute('tile-state', 'empty');
 
+        let currentRowHtml = getRow(currentRow);
+        let currentRowWord = currentRowHtml?.getAttribute('word');
+        currentRowHtml?.setAttribute('word', `${currentRowWord?.slice(0, currentRowWord.length - 1)}`);
+    }
+
+    function handleEnter() {
+        let currentRowHtml = getRow(currentRow);
+        let currentRowWord = currentRowHtml?.getAttribute('word');
+        if (currentRowWord == null) {
+            return;
+        }
+
+        let wordTooShort = currentRowWord.length < 4;
+        if (wordTooShort || !wordList.includes(currentRowWord)) {
+            currentRowHtml?.setAttribute('animation-state', 'shake');
+            setTimeout(() => currentRowHtml?.setAttribute('animation-state', 'none'), 1000);
+            refreshToast(wordTooShort ? 'Not enough letters' : 'Not in word list');
+        }
+        else {   
             let evaluation = getEvaluation(currentRowWord, correctWord);
+            fillTilesWithEvaluation(evaluation);
+            
             if (evaluation.every(x => x == '🟩')) {
-                gameOver = true;
-            }
-
-            for (let tile = 0; tile < 4; tile++) {
-                let currentTileHtml = getTile(currentRow, tile);
-                setTimeout(() => currentTileHtml?.setAttribute('animation-state', 'flip-in'), 250 * tile);
-                setTimeout(() => {
-                    currentTileHtml?.setAttribute('animation-state', 'flip-out');
-
-                    switch (evaluation[tile]) {
-                        case '🟩':
-                            currentTileHtml?.setAttribute('tile-state', 'correct');
-                            break;
-                        case '🟨':
-                            currentTileHtml?.setAttribute('tile-state', 'present');
-                            break;
-                        case '⬜':
-                            currentTileHtml?.setAttribute('tile-state', 'absent');
-                            break;
-                    }
-                }, 250 * tile + 250);
+                gameWon = true;
+                setTimeout(() => getRow(currentRow - 1)?.setAttribute('animation-state', 'bounce'), 1250);
             }
 
             currentRow++;
@@ -117,18 +102,56 @@
         }
     }
 
-    document.addEventListener('keydown', onKeyPressed);
+    function fillTilesWithEvaluation(evaluation: Array<string>) {
+        for (let tile = 0; tile < 4; tile++) {
+            let currentTileHtml = getTile(currentRow, tile);
+            setTimeout(() => currentTileHtml?.setAttribute('animation-state', 'flip-in'), 250 * tile);
+            setTimeout(() => {
+                currentTileHtml?.setAttribute('animation-state', 'flip-out');
+
+                switch (evaluation[tile]) {
+                    case '🟩':
+                        currentTileHtml?.setAttribute('tile-state', 'correct');
+                        break;
+                    case '🟨':
+                        currentTileHtml?.setAttribute('tile-state', 'present');
+                        break;
+                    case '⬜':
+                        currentTileHtml?.setAttribute('tile-state', 'absent');
+                        break;
+                }
+            }, 250 * tile + 250);
+        }
+    }
+
+    function onKeyPressed(event: KeyboardEvent): void {
+        if (gameWon || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) {
+            return;
+        }
+
+        if (currentRow < 6) {
+            if (isLetter(event.key) && currentTile < 3) {
+                handleLetterPress(event.key);
+            }
+            else if (event.key == 'Backspace' && currentTile >= 0) {
+                handleBackspace();
+            }
+            else if (event.key == 'Enter') {
+               handleEnter();
+            }
+        }
+    }
+
+    onMounted(() => document.addEventListener('keydown', onKeyPressed));
 </script>
 
 <template>
-    <BoardContainer />
+    <GameContainer />
 </template>
 
 <style>
-    body 
-    {
-        background-color: rgb(56, 61, 105);
-        font-family: Arial, Helvetica, sans-serif;
-    }
-
+body {
+    background-color: rgb(56, 61, 105);
+    font-family: Arial, Helvetica, sans-serif;
+}
 </style>

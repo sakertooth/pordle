@@ -44,7 +44,6 @@
         color: white;
     }
 
-
     .board-tile[animation-state='pop'] {
         animation-name: Pop;
         animation-duration: 100ms;
