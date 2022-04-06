@@ -3,23 +3,37 @@
 </script>
 
 <template>
-    <div class="prom-question-mark">
+    <div id="prom-question-mark" animation-state="none">
         ?
     </div>
 </template>
 
 <style>
-    .prom-question-mark {
-        width: 57.5px;
-        height: 54.5px;
-        box-sizing: border-box;
-        align-items: center;
-        vertical-align: middle;
-        font-size: 2rem;
-        justify-content: center;
+    #prom-question-mark {
+        width: 62.5px;
+        height: 57.83px;
         display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 2rem;
         font-weight: bold;
-        border: 2px solid var(--color-tone-4);
         color: white;
+        background-color: #811331;
+        float: right;
+        opacity: 0;
+        margin-top: calc(2 * 62px);
+    }
+
+    #prom-question-mark[animation-state="prom-slide-in"] {
+        animation-name: PromSlideIn;
+        animation-duration: 1s;
+        animation-fill-mode: forwards;
+    }
+
+    @keyframes PromSlideIn {
+        to {
+            opacity: 1;
+            transform: translateX(-625px);
+        }
     }
 </style>

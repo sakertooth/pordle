@@ -6,8 +6,8 @@
 
 <template>
     <div id="game-container">
-        <PromQuestionMark />
         <ToastContainer />
+        <PromQuestionMark />
         <BoardContainer />
     </div>
 </template>

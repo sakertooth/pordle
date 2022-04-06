@@ -20,7 +20,6 @@
         height: 372px;
         grid-template-rows: repeat(6, 1fr);
         gap: 5px;
-        padding: 10px;
         box-sizing: border-box;
     }
 </style>

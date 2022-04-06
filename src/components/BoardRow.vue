@@ -92,7 +92,7 @@
 
     @keyframes BringToCenter {
       to {
-        transform: translateY(var(--center-pxshift));
+        transform: translateY(var(--pxshift));
       }
     }
 </style>

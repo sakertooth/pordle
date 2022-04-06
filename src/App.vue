@@ -102,7 +102,7 @@
                     setTimeout(() => getRow(currentRow)?.children[tile].setAttribute('animation-state', fadeType), 2250 + 100 * tile);
                 }
 
-                //Fade other rows and bring current row to center of page
+                //Fade other rows and bring current row to center of page, and slide in question mark
                 let boardHtml = (document.getElementById('board') as HTMLElement);
                 setTimeout(() => {
                     for (let row = 0; row < 6; ++row) {
@@ -112,11 +112,14 @@
                         boardHtml.children[row].setAttribute('animation-state', 'fade-out');
                     }
 
-                    (boardHtml.children[currentRow] as HTMLElement).style.setProperty('--center-pxshift', (2 - currentRow) * 62 + "px");
+                    (boardHtml.children[currentRow] as HTMLElement).style.setProperty('--pxshift', (2 - currentRow) * 62 + "px");
                     boardHtml.children[currentRow].setAttribute('animation-state', 'bring-to-center');
 
                     let gameContainerHtml = (document.getElementById('game-container') as HTMLElement);
                     gameContainerHtml.setAttribute('animation-state', 'prom-to-pearl');
+
+                    let promQuestionMarkHtml = (document.getElementById('prom-question-mark') as HTMLElement);
+                    promQuestionMarkHtml.setAttribute('animation-state', 'prom-slide-in');
                 }, 2250 + 800);
             }
             else {
