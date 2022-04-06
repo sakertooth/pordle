@@ -3,7 +3,7 @@
 </script>
 
 <template>
-    <div id="board">
+    <div id="board" animation-state="none">
         <BoardRow/>
         <BoardRow/>
         <BoardRow/>

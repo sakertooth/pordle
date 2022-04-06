@@ -91,14 +91,39 @@
         else {   
             let evaluation = getEvaluation(currentRowWord, correctWord);
             fillTilesWithEvaluation(evaluation);
-            
+
             if (evaluation.every(x => x == '🟩')) {
                 gameWon = true;
-                setTimeout(() => getRow(currentRow - 1)?.setAttribute('animation-state', 'bounce'), 1250);
+                setTimeout(() => getRow(currentRow)?.setAttribute('animation-state', 'bounce'), 1250);
+
+                //Color tiles with prom colors
+                for (let tile = 0; tile < 4; ++tile) {
+                    let fadeType = tile % 2 ? 'prom-fade-one' : 'prom-fade-two';
+                    setTimeout(() => getRow(currentRow)?.children[tile].setAttribute('animation-state', fadeType), 2250 + 100 * tile);
+                }
+
+                //Fade other rows and bring current row to center of page
+                let boardHtml = (document.getElementById('board') as HTMLElement);
+                setTimeout(() => {
+                    for (let row = 0; row < 6; ++row) {
+                        if (row == currentRow) {
+                            continue;
+                        }
+                        boardHtml.children[row].setAttribute('animation-state', 'fade-out');
+                    }
+
+                    (boardHtml.children[currentRow] as HTMLElement).style.setProperty('--center-pxshift', (2 - currentRow) * 62 + "px");
+                    boardHtml.children[currentRow].setAttribute('animation-state', 'bring-to-center');
+
+                    let gameContainerHtml = (document.getElementById('game-container') as HTMLElement);
+                    gameContainerHtml.setAttribute('animation-state', 'prom-to-pearl');
+                }, 2250 + 800);
+            }
+            else {
+                currentRow++;
+                currentTile = -1;
             }
 
-            currentRow++;
-            currentTile = -1;
         }
     }
 
@@ -150,8 +175,8 @@
 </template>
 
 <style>
-body {
-    background-color: rgb(56, 61, 105);
-    font-family: Arial, Helvetica, sans-serif;
-}
+    body {
+        background-color: rgb(56, 61, 105);
+        font-family: Arial, Helvetica, sans-serif;
+    }
 </style>

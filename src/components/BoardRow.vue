@@ -3,7 +3,7 @@
 </script>
 
 <template>
-    <div class="board-row" word="" animation-state="empty">
+    <div class="board-row" word="" animation-state="none">
         <BoardTile />
         <BoardTile />
         <BoardTile />
@@ -13,19 +13,19 @@
 
 <style>
     .board-row {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 5px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 5px;
     }
 
     .board-row[animation-state="shake"] {
-        animation-name: Shake;
-        animation-duration: 600ms;
+      animation-name: Shake;
+      animation-duration: 600ms;
     }
 
     .board-row[animation-state="bounce"] {
-        animation-name: Bounce;
-        animation-duration: 1000ms;
+      animation-name: Bounce;
+      animation-duration: 1000ms;
     }
 
     @keyframes Shake {
@@ -69,6 +69,30 @@
       }
       100% {
         transform: translateY(0);
+      }
+    }
+
+    .board-row[animation-state="fade-out"] {
+      animation-name: FadeOut;
+      animation-duration: 750ms;
+      animation-fill-mode: forwards;
+    }
+
+    @keyframes FadeOut {
+      to {
+        opacity: 0;
+      }
+    }
+
+    .board-row[animation-state="bring-to-center"] {
+      animation-name: BringToCenter;
+      animation-duration: 1s;
+      animation-fill-mode: forwards;
+    }
+
+    @keyframes BringToCenter {
+      to {
+        transform: translateY(var(--center-pxshift));
       }
     }
 </style>

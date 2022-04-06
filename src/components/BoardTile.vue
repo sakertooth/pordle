@@ -1,7 +1,3 @@
-<script setup lang="ts">
-
-</script>
-
 <template>
     <div class="board-tile" tile-state="empty" animation-state="none"></div>
 </template>
@@ -67,6 +63,18 @@
         animation-timing-function: ease-in;
     }
 
+    .board-tile[animation-state='prom-fade-one'] {
+        animation-name: PromFadeOne;
+        animation-duration: 400ms;
+        animation-fill-mode: forwards;
+    }
+
+    .board-tile[animation-state='prom-fade-two'] {
+        animation-name: PromFadeTwo;
+        animation-duration: 400ms;
+        animation-fill-mode: forwards;
+    }
+
 
     @keyframes Pop {
         from {
@@ -109,6 +117,18 @@
 
         100% {
             transform: rotateX(0);
+        }
+    }
+
+    @keyframes PromFadeOne {
+        to {
+            background-color: rgb(178, 34, 34);
+        }
+    }
+
+    @keyframes PromFadeTwo {
+        to {
+            background-color: rgb(240,128,128);
         }
     }
 
