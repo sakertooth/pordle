@@ -11,7 +11,6 @@
 <style>
     #board {
         display: grid;
-        position: relative;
         width: 290px;
         height: 400px;
         grid-template-rows: repeat(6, 1fr);

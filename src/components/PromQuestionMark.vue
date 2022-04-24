@@ -1,23 +1,31 @@
 <template>
-    <div id="prom-question-mark" animation-state="none">
-        ?
+    <div id="prom-question-mark-container">
+        <div id="prom-question-mark" animation-state="none">
+            ?
+        </div>
     </div>
 </template>
 
 <style>
+
+    #prom-question-mark-container {
+        display: flex;
+        padding-bottom: calc(59.17px + 5px);
+    }
+
     #prom-question-mark {
-        width: 62.5px;
-        height: 57.83px;
+        width: 63.75px;
+        height: 59.17px;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
         font-size: 2rem;
         font-weight: bold;
+        vertical-align: middle;
+        box-sizing: border-box;
         color: white;
         background-color: #811331;
         opacity: 0;
-        display: flex;
-        position: absolute;
-        justify-content: center;
-        align-items: center;
-        bottom: 25%
     }
 
     #prom-question-mark[animation-state="prom-slide-in"] {

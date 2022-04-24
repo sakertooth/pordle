@@ -1,6 +1,7 @@
 import wordListRaw from '../assets/validWords.txt?raw'
 import { isLetter } from './IsLetter';
 import { reactive } from 'vue';
+import { baseCompile } from '@vue/compiler-core';
 
 export class Pordle 
 {
@@ -98,7 +99,7 @@ export class Pordle
                     setTimeout(() => this.getRow(this.currentRow)?.children[tile].setAttribute('animation-state', fadeType), 2250 + 100 * tile);
                 }
 
-                //Fade other rows, bring current row to center of page, and slide in question mark 
+                //Fade other rows, bring current row to center of page, and bring in question mark 
                 let boardHtml = (document.getElementById('board') as HTMLElement);
                 setTimeout(() => {
                     for (let row = 0; row < 6; ++row) {
@@ -108,8 +109,7 @@ export class Pordle
                         boardHtml.children[row].setAttribute('animation-state', 'fade-out');
                     }
 
-                    (boardHtml.children[this.currentRow] as HTMLElement).style.setProperty('--pxshift', (2 - this.currentRow) * 62 + "px");
-                    boardHtml.children[this.currentRow].setAttribute('animation-state', 'bring-to-center');
+                    this.slideCurrentRowToCenter(2);
 
                     let promQuestionMarkHtml = (document.getElementById('prom-question-mark') as HTMLElement);
                     promQuestionMarkHtml.setAttribute('animation-state', 'prom-slide-in');
@@ -123,6 +123,21 @@ export class Pordle
             }
 
         }
+    }
+
+    slideCurrentRowToCenter(rowIndex: number) {
+        let boardHtml = (document.getElementById('board') as HTMLElement);
+        let boardHtmlStyle = getComputedStyle(boardHtml);
+        let boardRowHtmlStyle = getComputedStyle(boardHtml.getElementsByClassName('board-row')[0]);
+
+        let boardRowHeight = parseFloat(boardRowHtmlStyle.height.slice(0, boardHtmlStyle.height.length - 1));
+        let boardRowGap = parseFloat(boardRowHtmlStyle.gap.slice(0, boardRowHtmlStyle.gap.length - 1));
+
+        let boardRow = boardHtml.children[this.currentRow] as HTMLElement;
+        boardRow.style.setProperty('--pxshift', (rowIndex - this.currentRow) * (boardRowHeight + boardRowGap) + "px");
+        boardRow.setAttribute('animation-state', 'bring-to-center');
+
+        (document.getElementById('board-container') as HTMLElement).style.setProperty('margin-left', '0px');
     }
 
     fillTilesWithEvaluation(evaluation: Array<string>) {
@@ -143,6 +158,44 @@ export class Pordle
                         break;
                 }
             }, 250 * tile + 250);
+        }
+
+        setTimeout(() => {
+            let currentRowHtml = this.getRow(this.currentRow - 1);
+            let currentRowWord = currentRowHtml?.getAttribute('word');
+
+            if (currentRowWord == null) {
+                return;
+            }
+            
+            let keyboardRows = document.getElementById('keyboard')?.getElementsByClassName('keyboard-row');
+            if (keyboardRows == null) {
+                return;
+            }
+
+            for (let keyboardRow of keyboardRows) {
+                this.refreshKeyboardWithEvaluation(keyboardRow as HTMLElement, currentRowWord, evaluation);
+            }
+        }, 1000);
+    }
+
+    refreshKeyboardWithEvaluation(keyboardRow: HTMLElement, guess: string, evaluation: Array<string>) {
+        const keys = keyboardRow.getElementsByClassName('keyboard-button');
+        for (let key of keys) {
+            if (key.innerHTML != null && guess.includes(key.innerHTML)) {
+                const evalForKey = evaluation[guess.indexOf(key.innerHTML)];
+                switch (evalForKey) {
+                    case '🟩':
+                        key.setAttribute('button-state', 'correct');
+                        break;
+                    case '🟨':
+                        key.setAttribute('button-state', 'present');
+                        break;
+                    case '⬜':
+                        key.setAttribute('button-state', 'absent');
+                        break; 
+                }
+            }
         }
     }
 
@@ -185,7 +238,6 @@ export class Pordle
     getTile(row: number, tile: number) {
         return this.getRow(row)?.children[tile];
     }
-
 }
 
 export let gameState = reactive(new Pordle());

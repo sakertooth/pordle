@@ -1,14 +1,15 @@
 <script setup lang="ts">
-    import { isLetter } from '@/IsLetter';
-import { gameState } from '@/PordleState';
+    import { gameState } from '@/PordleState';
 
     const props = defineProps(['keyboardKey'])
     function onVirtualKeyPress() {
-        if (props.keyboardKey == "Delete") {
-            gameState.handleBackspace();
-        }
-        else {
-            gameState.submitKey(props.keyboardKey);
+        if (!gameState.gameWon) {
+            if (props.keyboardKey == "Delete") {
+                gameState.handleBackspace();
+            }
+            else {
+                gameState.submitKey(props.keyboardKey);
+            }
         }
     }
 </script>
@@ -41,17 +42,17 @@ import { gameState } from '@/PordleState';
         -webkit-tap-highlight-color: rgba(0,0,0,0.3);
     }
 
-    .keyboard-button[data-state='correct'] {
+    .keyboard-button[button-state='correct'] {
         background-color: var(--key-bg-correct);
         color: var(--key-evaluated-text-color);
     }
 
-    .keyboard-button[data-state='present'] {
+    .keyboard-button[button-state='present'] {
         background-color: var(--key-bg-present);
         color: var(--key-evaluated-text-color);
     }
 
-    .keyboard-button[data-state='absent'] {
+    .keyboard-button[button-state='absent'] {
         background-color: var(--key-bg-absent);
         color: var(--key-evaluated-text-color);
     }

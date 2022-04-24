@@ -1,7 +1,6 @@
 <script setup lang="ts">
     import ToastContainer from "./toast/ToastContainer.vue";
     import BoardContainer from "./board/BoardContainer.vue";
-    import PromQuestionMark from "./PromQuestionMark.vue"
     import Keyboard from "./keyboard/Keyboard.vue"
 </script>
 
@@ -17,10 +16,10 @@
     #game-container {
         width: 100%;
         max-width: var(--game-max-width);
-        margin: 0 auto;
-        margin-top: 120px;
         height: calc(100% - var(--header-height));
+        margin: 0 auto;
         display: flex;
         flex-direction: column;
+        justify-content: center;
     }
 </style>

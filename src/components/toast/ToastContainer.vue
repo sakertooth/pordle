@@ -13,7 +13,5 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        position: relative;
-        margin-bottom: 25px;
     }
 </style>

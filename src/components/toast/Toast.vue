@@ -15,7 +15,6 @@
         width: fit-content;
         justify-content: center;
         align-items: center;
-        position: absolute;
     }
     .toast[animation-state='fade'] {
         animation-name: Fade;

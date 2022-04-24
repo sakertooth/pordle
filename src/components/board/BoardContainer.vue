@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import Board from './Board.vue'
-    import PromQuestionMark from "../PromQuestionMark.vue"
+import PromQuestionMark from '../PromQuestionMark.vue'
 </script>
 
 <template>
@@ -14,8 +14,8 @@
     #board-container {
         display: flex;
         justify-content: center;
+        margin-left: 63.75px;
         align-items: center;
         flex-grow: 1;
-        overflow: hidden;
     }
 </style>
