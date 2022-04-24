@@ -5,7 +5,7 @@
 
     const keyboardRows = ref([
         { id: 1, numKeyboardKeys: 10, keyboardKeys: ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p']},
-        { id: 2, numKeyboardKeys: 9, keyboardKeys: ['a', 'w', 'd', 'f', 'g', 'h', 'j', 'k', 'l']},
+        { id: 2, numKeyboardKeys: 9, keyboardKeys: ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l']},
         { id: 3, numKeyboardKeys: 9, keyboardKeys: ['Enter', 'z', 'x', 'c', 'v', 'b', 'n', 'm', 'Delete']}
     ]);
 </script>
