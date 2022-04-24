@@ -3,7 +3,7 @@
 </template>
 
 <style>
-    @import '../../assets/styles/pordle.css';
+    @import '/assets/styles/pordle.css';
 
     .board-tile {
         width: 100%;

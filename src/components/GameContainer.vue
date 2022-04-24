@@ -1,19 +1,26 @@
 <script setup lang="ts">
-    import ToastContainer from "./ToastContainer.vue";
-    import BoardContainer from "./BoardContainer.vue";
+    import ToastContainer from "./toast/ToastContainer.vue";
+    import BoardContainer from "./board/BoardContainer.vue";
     import PromQuestionMark from "./PromQuestionMark.vue"
+    import Keyboard from "./keyboard/Keyboard.vue"
 </script>
 
 <template>
     <div id="game-container">
         <ToastContainer />
-        <PromQuestionMark />
         <BoardContainer />
+        <Keyboard />
     </div>
 </template>
 
 <style>
     #game-container {
-        margin-top: 190px;
+        width: 100%;
+        max-width: var(--game-max-width);
+        margin: 0 auto;
+        margin-top: 120px;
+        height: calc(100% - var(--header-height));
+        display: flex;
+        flex-direction: column;
     }
 </style>

@@ -4,22 +4,19 @@
 
 <template>
     <div id="board" animation-state="none">
-        <BoardRow/>
-        <BoardRow/>
-        <BoardRow/>
-        <BoardRow/>
-        <BoardRow/>
-        <BoardRow/>
+        <BoardRow v-for="i in 6"/>
     </div>
 </template>
 
 <style>
     #board {
         display: grid;
-        width: 265px;
-        height: 372px;
+        position: relative;
+        width: 290px;
+        height: 400px;
         grid-template-rows: repeat(6, 1fr);
         gap: 5px;
+        padding: 10px;
         box-sizing: border-box;
     }
 </style>

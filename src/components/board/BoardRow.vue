@@ -4,10 +4,7 @@
 
 <template>
     <div class="board-row" word="" animation-state="none">
-        <BoardTile />
-        <BoardTile />
-        <BoardTile />
-        <BoardTile />
+        <BoardTile v-for="i in 4"/>
     </div>
 </template>
 

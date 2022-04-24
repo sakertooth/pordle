@@ -14,6 +14,6 @@
         align-items: center;
         justify-content: center;
         position: relative;
-        padding-bottom: 25px;
+        margin-bottom: 25px;
     }
 </style>
